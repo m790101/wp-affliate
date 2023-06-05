@@ -172,8 +172,20 @@ class Affiliate_WP_MarketPress extends Affiliate_WP_Base {
 	 * @since   1.6
 	*/
 	public function mark_referral_complete( $order = array() ) {
-
+		$status = 'active';
 		$order_id = $order->ID;
+
+		$amount = $order->get_meta( 'mp_order_total' );
+		
+		
+		// decide if pass to become affiliated
+		$user_id = get_current_user_id();
+		$affiliate_id = affwp_get_affiliate_id($user_id);
+		affwp_set_affiliate_status($affiliate_id , $status);
+		// if( !affwp_get_affiliate_status($affiliate_id)){
+		// 	affwp_set_affiliate_status($affiliate_id , $status);
+		// }
+
 
 		$referral = affwp_get_referral_by( 'reference', $order_id, $this->context );
 
